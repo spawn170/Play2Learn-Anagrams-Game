@@ -1,27 +1,38 @@
-/* Global page centering */
+/* Animated gradient background */
 body, html {
   height: 100%;
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+  background: linear-gradient(135deg, #74ebd5, #ACB6E5, #89f7fe, #66a6ff);
+  background-size: 400% 400%;
   display: flex;
   justify-content: center;
   align-items: center;
+  animation: gradientShift 15s ease infinite;
 }
 
-/* Main game container */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Game container stays white, with soft glow */
 .container, 
 .game, 
 .game-over {
-  background: #fff;
+  position: relative;
+  background: #ffffff;
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
-  max-width: 400px;
+  box-shadow: 0px 8px 25px rgba(0,0,0,0.2);
+  max-width: 500px;
   width: 90%;
   text-align: center;
+  animation: fadeIn 0.6s ease;
 }
 
+/* Card hover sparkle, but card stays white */
 .card-container {
   display: flex;
   justify-content: center;
@@ -30,7 +41,8 @@ body, html {
 }
 
 .card {
-  background: rgba(255,255,255,0.95);
+  position: relative;
+  background: #ffffff;
   padding: 2rem;
   border-radius: 12px;
   width: 260px;
@@ -46,77 +58,62 @@ body, html {
   box-shadow: 0 12px 28px rgba(0,0,0,0.25);
 }
 
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg, 
+    rgba(255, 255, 255, 0.6) 0%, 
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+}
+
+.card:hover::after {
+  animation: shine 1s ease forwards;
+}
+
+@keyframes shine {
+  from { left: -75%; }
+  to { left: 125%; }
+}
+
+/* Images inside card pop-in */
 .card img {
   width: 100px;
   margin-bottom: 1rem;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.5s ease;
+  opacity: 0;
+  transform: scale(0.8);
+  animation: popIn 0.6s ease forwards;
 }
 
-.card:hover img {
-  transform: scale(1.1) rotate(3deg);
+@keyframes popIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
+/* Button glow */
 button {
   margin-top: 1rem;
   padding: 0.7rem 1.5rem;
   border: none;
   border-radius: 8px;
-  background: #0077cc;
+  background: linear-gradient(90deg, #0077cc, #005fa3);
   color: white;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 119, 204, 0.6);
 }
 
 button:hover {
-  background: #005fa3;
   transform: scale(1.05);
-}
-
-.game, .game-over {
-  max-width: 500px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: rgba(255,255,255,0.95);
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  text-align: center;
-  animation: fadeIn 0.5s ease-in;
-}
-
-@keyframes fadeIn {
-  from {opacity: 0; transform: translateY(-10px);}
-  to {opacity:1; transform: translateY(0);}
-}
-
-.timer {
-  display: inline-block;
-  font-weight: bold;
-  color: #ff5722;
-  transition: color 0.3s ease, transform 0.3s ease;
-}
-
-.timer.warning {
-  color: #e53935;
-  transform: scale(1.3);
-  animation: pulse 0.5s alternate infinite;
-}
-
-@keyframes pulse {
-  from {transform: scale(1.3);}
-  to {transform: scale(1.5);}
-}
-
-ul li {
-  background: #f0f0f0;
-  margin: 0.3rem 0;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-weight: 500;
-  animation: slideIn 0.3s ease;
-}
-
-@keyframes slideIn {
-  from {opacity: 0; transform: translateX(-20px);}
-  to {opacity: 1; transform: translateX(0);}
+  box-shadow: 0 0 20px rgba(0, 119, 204, 0.9);
 }
